@@ -1,0 +1,84 @@
+{
+  "id": "ha-bridge",
+  "name": "Home Assistant Bridge",
+  "description": "Bridge Home Assistant websocket events into OpenClaw messaging and agent delivery.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "haWsUrl": { "type": "string", "minLength": 1 },
+      "haToken": { "type": "string", "minLength": 1 },
+      "defaultChannel": { "type": "string", "minLength": 1 },
+      "defaultTarget": { "type": "string", "minLength": 1 },
+      "directEventType": { "type": "string", "default": "notify_openclaw_direct" },
+      "agentEventType": { "type": "string", "default": "notify_openclaw_agent" },
+      "directChannel": { "type": "string" },
+      "directTarget": { "type": "string" },
+      "agentChannel": { "type": "string" },
+      "agentTarget": { "type": "string" },
+      "directMessageTemplate": { "type": "string", "default": "[HA] {{event_type}}: {{message}}" },
+      "agentPromptTemplate": {
+        "type": "string",
+        "default": "请把下面这条 Home Assistant 事件整理成一条简洁、自然、适合直接发给用户的提醒：\\n事件类型：{{event_type}}\\n事件时间：{{time_fired}}\\n事件内容：{{message}}"
+      },
+      "agentId": { "type": "string" },
+      "agentSessionId": { "type": "string", "default": "ha-bridge" },
+      "thinking": {
+        "type": "string",
+        "enum": ["off", "minimal", "low", "medium", "high", "xhigh"],
+        "default": "low"
+      },
+      "dedupeWindowMs": { "type": "integer", "minimum": 0, "default": 5000 },
+      "maxMessagesPerMinute": { "type": "integer", "minimum": 1, "default": 30 },
+      "queueMax": { "type": "integer", "minimum": 1, "default": 200 },
+      "commandTimeoutMs": { "type": "integer", "minimum": 1000, "default": 45000 },
+      "reconnectInitialMs": { "type": "integer", "minimum": 100, "default": 2000 },
+      "reconnectMaxMs": { "type": "integer", "minimum": 1000, "default": 60000 },
+      "reconnectJitterRatio": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.2 },
+      "logLevel": {
+        "type": "string",
+        "enum": ["error", "warn", "info", "debug"],
+        "default": "info"
+      }
+    }
+  },
+  "uiHints": {
+    "haWsUrl": {
+      "label": "HA WebSocket URL",
+      "placeholder": "ws://homeassistant.local:8123/api/websocket"
+    },
+    "haToken": {
+      "label": "HA Token",
+      "sensitive": true
+    },
+    "defaultChannel": {
+      "label": "Default Channel"
+    },
+    "defaultTarget": {
+      "label": "Default Target",
+      "placeholder": "channel:1234567890"
+    },
+    "directChannel": {
+      "label": "Direct Channel"
+    },
+    "directTarget": {
+      "label": "Direct Target"
+    },
+    "agentChannel": {
+      "label": "Agent Channel"
+    },
+    "agentTarget": {
+      "label": "Agent Target"
+    },
+    "agentId": {
+      "label": "Agent ID"
+    },
+    "agentSessionId": {
+      "label": "Agent Session ID"
+    },
+    "thinking": {
+      "label": "Thinking"
+    }
+  }
+}
